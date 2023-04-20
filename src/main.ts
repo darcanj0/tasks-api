@@ -10,10 +10,11 @@ async function bootstrap() {
     .setTitle('tasks-api')
     .setVersion('1.0.0')
     .setDescription('Api for personal tasks management')
-    .addTag('auth')
-    .addTag('tasks')
-    .addTag('tags')
     .addTag('status')
+    .addTag('auth')
+    .addTag('user')
+    .addTag('task')
+    .addTag('tag')
     .addBearerAuth()
     .build();
 
