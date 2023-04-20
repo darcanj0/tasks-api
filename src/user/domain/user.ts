@@ -8,15 +8,26 @@ interface UserProps {
 }
 
 export class User {
-  name: string;
-  email: string;
-  password: string;
+  private props: UserProps;
+
+  get name() {
+    return this.props.name;
+  }
+
+  set name(newName: string) {
+    this.props.name = newName;
+  }
+
+  get email() {
+    return this.props.email;
+  }
+
+  set email(newEmail: string) {
+    this.props.email = newEmail;
+  }
 
   private constructor(props: UserProps) {
-    const { email, name, password } = props;
-    this.email = email;
-    this.name = name;
-    this.password = password;
+    this.props = props;
   }
 
   public static isValidName(name: string): boolean {

@@ -1,7 +1,7 @@
 import { Controller, Inject, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CreateUserDto } from './usecases/create-user.usecase.dto';
-import { CreateUserUsecase } from './usecases/create-user.usecase';
+import { CreateUserDto } from './usecases/create-user/create-user.dto';
+import { CreateUserUsecase } from './usecases/create-user/create-user.usecase';
 import { CheckResult } from 'src/utils/error-messages';
 
 @Controller('user')
