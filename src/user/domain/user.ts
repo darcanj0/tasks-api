@@ -1,4 +1,4 @@
-import { ErrorMessages } from 'src/utils/error-messages';
+import { INVALID_USER_NAME } from 'src/utils/error-messages';
 import { Result } from 'src/utils/result';
 
 interface UserProps {
@@ -24,9 +24,9 @@ export class User {
     return isValid;
   }
 
-  public static create(props: UserProps): Result<User, string> {
+  public static create(props: UserProps): Result<User> {
     if (!this.isValidName(props.name)) {
-      return Result.fail(ErrorMessages.INVALID_USER_NAME);
+      return Result.fail(INVALID_USER_NAME);
     }
 
     return Result.success(new User(props));
