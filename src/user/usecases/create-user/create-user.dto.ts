@@ -20,7 +20,7 @@ export class CreateUserDto {
   @Matches(/(?=.*d)(?=.*[a-z])(?=.*[A-Z])(?=.*[W]).{6,20}/i)
   @ApiProperty({
     type: String,
-    minLength: 8,
+    minLength: 6,
     description: 'Password. One number, one letter.',
     example: 'Password1!',
   })

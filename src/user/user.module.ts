@@ -9,5 +9,6 @@ import { UpdateUserUsecase } from './usecases/update-user/update-user.usecase';
   imports: [MongoModule],
   providers: [CreateUserUsecase, UpdateUserUsecase, UserRepository],
   controllers: [UserController],
+  exports: [UserRepository],
 })
 export class UserModule {}

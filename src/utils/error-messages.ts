@@ -2,12 +2,13 @@ import {
   BadRequestException,
   InternalServerErrorException,
   NotFoundException,
+  UnauthorizedException,
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { Result } from './result';
 
-export const CheckResult = (result: Result<any>): void | never => {
-  if (result.isSuccess) return;
+export const CheckResult = (result: Result<any>): any | never => {
+  if (result.isSuccess) return result.getResult;
   else {
     const statusCode = result.error.statusCode;
     const message = result.error.error;
@@ -21,6 +22,8 @@ export const CheckResult = (result: Result<any>): void | never => {
         throw new BadRequestException(message);
       case 500:
         throw new InternalServerErrorException(message);
+      case 401:
+        throw new UnauthorizedException(message);
     }
   }
 };
@@ -48,4 +51,9 @@ export const INVALID_USER_EMAIL: IErrorMessage = {
 export const INVALID_USER_NOT_FOUND: IErrorMessage = {
   error: 'User not found',
   statusCode: 404,
+};
+
+export const INVALID_AUTH: IErrorMessage = {
+  error: 'User auth is invalid',
+  statusCode: 401,
 };
