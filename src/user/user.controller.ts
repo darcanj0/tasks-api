@@ -1,8 +1,10 @@
 import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CreateUserDto } from './usecases/create-user.usecase.dto';
 import { CreateUserUsecase } from './usecases/create-user/create-user.usecase';
 import { CheckResult } from 'src/utils/error-messages';
+import { CreateUserDto } from './usecases/create-user/create-user.dto';
+import { UpdateUserDto } from './usecases/update-user/update-user.dto';
+import { UpdateUserUsecase } from './usecases/update-user/update-user.usecase';
 
 @Controller('user')
 @ApiTags('user')
@@ -10,6 +12,9 @@ export class UserController {
   constructor(
     @Inject(CreateUserUsecase)
     private readonly createUserUsecase: CreateUserUsecase,
+
+    @Inject(UpdateUserUsecase)
+    private readonly updateUserUsecase: UpdateUserUsecase,
   ) {}
 
   @Post()
@@ -18,6 +23,15 @@ export class UserController {
   })
   async createUser(@Body() dto: CreateUserDto): Promise<void> {
     const result = await this.createUserUsecase.execute(dto);
+    return CheckResult(result);
+  }
+
+  @Post()
+  @ApiOperation({
+    summary: 'Updates an existing user',
+  })
+  async updateUser(@Body() dto: UpdateUserDto): Promise<void> {
+    const result = await this.updateUserUsecase.execute(dto);
     return CheckResult(result);
   }
 }

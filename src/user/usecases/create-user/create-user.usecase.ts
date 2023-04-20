@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { IUseCase } from 'src/utils/usecase.interface';
-import { CreateUserDto } from './create-user.usecase.dto';
+import { CreateUserDto } from './create-user.dto';
 import { IUserRepo } from '../../infra/user-repository.interface';
 import { UserRepository } from '../../infra/user-repository';
 import * as bcrypt from 'bcrypt';

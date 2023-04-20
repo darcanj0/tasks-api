@@ -22,7 +22,7 @@ export class CreateUserDto {
     type: String,
     minLength: 8,
     description: 'Password. One number, one letter.',
-    example: 'pAssword000!',
+    example: 'Password1!',
   })
   password: string;
 
