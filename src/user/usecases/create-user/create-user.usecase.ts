@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { IUseCase } from 'src/utils/usecase.interface';
 import { CreateUserDto } from './create-user.usecase.dto';
-import { IUserRepo } from '../infra/user-repository.interface';
-import { UserRepository } from '../infra/user-repository';
+import { IUserRepo } from '../../infra/user-repository.interface';
+import { UserRepository } from '../../infra/user-repository';
 import * as bcrypt from 'bcrypt';
-import { User } from '../domain/user';
+import { User } from '../../domain/user';
 import { Result } from 'src/utils/result';
 import {
   INTERNAL_SERVER_ERROR,
