@@ -1,8 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsHexadecimal, IsString, MaxLength, MinLength } from 'class-validator';
+import {
+  IsHexadecimal,
+  IsOptional,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 import { User } from 'src/user/domain/user';
 
-export class CreateTagDto {
+export class UpdateTagDto {
+  @IsOptional()
   @IsString()
   @MinLength(3)
   @MaxLength(15)
@@ -12,14 +19,17 @@ export class CreateTagDto {
     minLength: 3,
     maxLength: 15,
   })
-  title: string;
+  title?: string;
 
+  @IsOptional()
   @IsHexadecimal()
   @ApiProperty({
     example: '#1c38e3',
     type: String,
   })
-  hex: string;
+  hex?: string;
+
+  id: string;
 
   user: User;
 }

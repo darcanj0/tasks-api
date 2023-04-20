@@ -57,3 +57,13 @@ export const INVALID_AUTH: IErrorMessage = {
   error: 'User auth is invalid',
   statusCode: 401,
 };
+
+export const INVALID_TOKEN_NOT_SENT: IErrorMessage = {
+  error: 'Bearer token was not sent',
+  statusCode: 401,
+};
+
+export const INVALID_TAG_NOT_FOUND: IErrorMessage = {
+  error: 'Tag not found',
+  statusCode: 404,
+};

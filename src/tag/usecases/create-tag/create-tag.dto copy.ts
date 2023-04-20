@@ -1,6 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsHexadecimal, IsString, MaxLength, MinLength } from 'class-validator';
-import { User } from 'src/user/domain/user';
+import {
+  IsHexadecimal,
+  IsString,
+  IsUUID,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 export class CreateTagDto {
   @IsString()
@@ -21,5 +26,6 @@ export class CreateTagDto {
   })
   hex: string;
 
-  user: User;
+  @IsUUID()
+  creatorId: string;
 }
