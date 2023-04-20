@@ -26,6 +26,14 @@ export class User {
     this.props.email = newEmail;
   }
 
+  get password() {
+    return this.props.password;
+  }
+
+  set password(newPassword: string) {
+    this.props.password = newPassword;
+  }
+
   private constructor(props: UserProps) {
     this.props = props;
   }

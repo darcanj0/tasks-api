@@ -5,6 +5,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 export interface IUserRepo {
   emailAlreadyExists(email: string): Promise<boolean>;
   save(user: User): Promise<void>;
+  findUserByEmail(email: string): Promise<User>;
 }
 
 @Schema()

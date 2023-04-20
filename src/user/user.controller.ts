@@ -1,4 +1,4 @@
-import { Controller, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './usecases/create-user/create-user.dto';
 import { CreateUserUsecase } from './usecases/create-user/create-user.usecase';
@@ -16,7 +16,7 @@ export class UserController {
   @ApiOperation({
     summary: 'Creates a new user',
   })
-  async createUser(dto: CreateUserDto): Promise<void> {
+  async createUser(@Body() dto: CreateUserDto): Promise<void> {
     const result = await this.createUserUsecase.execute(dto);
     return CheckResult(result);
   }

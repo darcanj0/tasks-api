@@ -10,6 +10,18 @@ export class UserRepository implements IUserRepo {
     @InjectModel(UserModel.name) private userModel: Model<UserModel>,
   ) {}
 
+  async findUserByEmail(email: string): Promise<User> {
+    const query = await this.userModel.findOne({
+      email,
+    });
+    if (!query) return null;
+    return User.create({
+      email: query.email,
+      name: query.name,
+      password: query.password,
+    }).getResult;
+  }
+
   async emailAlreadyExists(email: string): Promise<any> {
     const query = await this.userModel
       .findOne({
@@ -20,23 +32,25 @@ export class UserRepository implements IUserRepo {
   }
 
   async save(user: User): Promise<void> {
-    const query = await this.userModel.find({
+    const query = await this.userModel.findOne({
       email: user.email,
     });
 
+    const obj = {
+      email: user.email,
+      name: user.name,
+      password: user.password,
+    };
+
     if (!query) {
-      await this.userModel.create({
-        email: user.email,
-        name: user.name,
-        password: user.password,
-      });
+      await this.userModel.insertMany([obj]);
       return;
     }
 
     await this.userModel.updateOne(
-      { email: user.email },
+      { id: user.email },
       {
-        $set: { email: user.email, name: user.name, password: user.password },
+        $set: obj,
       },
     );
   }

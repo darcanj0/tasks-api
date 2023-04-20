@@ -41,3 +41,8 @@ export const INVALID_USER_EMAIL: IErrorMessage = {
   error: 'Email already in use',
   statusCode: 422,
 };
+
+export const INVALID_USER_NOT_FOUND: IErrorMessage = {
+  error: 'User not found',
+  statusCode: 404,
+};

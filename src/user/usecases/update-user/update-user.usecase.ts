@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { IUseCase } from 'src/utils/usecase.interface';
-import { CreateUserDto, UpdateUserDto } from './update-user.dto';
+import { UpdateUserDto } from './update-user.dto';
 import { IUserRepo } from '../../infra/user-repository.interface';
 import { UserRepository } from '../../infra/user-repository';
 import * as bcrypt from 'bcrypt';
@@ -9,6 +9,8 @@ import { Result } from 'src/utils/result';
 import {
   INTERNAL_SERVER_ERROR,
   INVALID_USER_EMAIL,
+  INVALID_USER_NAME,
+  INVALID_USER_NOT_FOUND,
 } from 'src/utils/error-messages';
 
 @Injectable()
@@ -24,23 +26,24 @@ export class UpdateUserUseCase
     try {
       const { email, name, password } = dto;
 
+      const user = await this.userRepo.findUserByEmail(email);
+      if (!user) return Result.fail(INVALID_USER_NOT_FOUND);
+
       if (email) {
-        await this.changeEmail(email);
+        const changeEmail = await this.changeEmail(user, email);
+        if (changeEmail.isFailure) return Result.fail(changeEmail.error);
       }
 
       if (name) {
-        await this.changeName(name);
+        const changeName = await this.changeName(user, name);
+        if (changeName.isFailure) return Result.fail(changeName.error);
       }
 
       if (password) {
-        await this.changePassword(password);
+        await this.changePassword(user, password);
       }
-      const hashedPassword = await bcrypt.hash(password, 12);
 
-      const createUser = User.create({ ...dto, password: hashedPassword });
-      if (createUser.isFailure) return Result.fail(createUser.error);
-
-      await this.userRepo.save(createUser.getResult);
+      await this.userRepo.save(user);
 
       return Result.ok();
     } catch (error) {
@@ -52,5 +55,15 @@ export class UpdateUserUseCase
     const invalidEmail = await this.userRepo.emailAlreadyExists(email);
     if (invalidEmail) return Result.fail(INVALID_USER_EMAIL);
     user.email = email;
+  }
+
+  private async changePassword(user: User, password: string): Promise<void> {
+    const hashedPassword = await bcrypt.hash(password, 12);
+    user.password = hashedPassword;
+  }
+
+  private async changeName(user: User, name: string): Promise<Result<void>> {
+    const changeName = User.isValidName(name);
+    if (!changeName) return Result.fail(INVALID_USER_NAME);
   }
 }
