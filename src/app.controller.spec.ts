@@ -15,8 +15,8 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+    it('should return "App running on port 3000 ✌"', () => {
+      expect(appController.getHello()).toBe('App running on port 3000 ✌');
     });
   });
 });

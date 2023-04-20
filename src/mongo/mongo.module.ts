@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { variables } from 'src/config/variables';
 import {
   UserModel,
   UserSchema,
@@ -7,9 +8,7 @@ import {
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://127.0.0.1:27017', {
-      dbName: 'tasks-db',
-    }),
+    MongooseModule.forRoot(variables().mongoConnection),
     MongooseModule.forFeature([{ name: UserModel.name, schema: UserSchema }]),
   ],
   exports: [MongooseModule],
