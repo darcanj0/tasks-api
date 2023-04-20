@@ -6,6 +6,7 @@ import { ITagRepo } from 'src/tag/infra/tag-repository.interface';
 import { TagRepository } from 'src/tag/infra/tag-repository';
 import {
   INTERNAL_SERVER_ERROR,
+  INVALID_TAG_CREATOR,
   INVALID_TAG_NOT_FOUND,
 } from 'src/utils/error-messages';
 
@@ -17,10 +18,12 @@ export class UpdateTagUsecase implements IUseCase<UpdateTagDto, Result<void>> {
   ) {}
   async execute(dto: UpdateTagDto): Promise<Result<void>> {
     try {
-      const { hex, id, title } = dto;
+      const { hex, id, title, user } = dto;
 
       const tag = await this.tagRepo.findTagById(id);
       if (!tag) return Result.fail(INVALID_TAG_NOT_FOUND);
+
+      if (user.id !== tag.creatorId) return Result.fail(INVALID_TAG_CREATOR);
 
       if (hex) {
         tag.hex = hex;

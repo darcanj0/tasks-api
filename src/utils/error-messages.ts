@@ -63,7 +63,17 @@ export const INVALID_TOKEN_NOT_SENT: IErrorMessage = {
   statusCode: 401,
 };
 
+export const INVALID_AMMOUNT_TAGS: IErrorMessage = {
+  error: 'Task can have up to 5 tags',
+  statusCode: 422,
+};
+
 export const INVALID_TAG_NOT_FOUND: IErrorMessage = {
   error: 'Tag not found',
   statusCode: 404,
+};
+
+export const INVALID_TAG_CREATOR: IErrorMessage = {
+  error: 'Tag does not belong to user',
+  statusCode: 403,
 };
