@@ -10,6 +10,7 @@ import {
   INTERNAL_SERVER_ERROR,
   INVALID_USER_EMAIL,
 } from 'src/utils/error-messages';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class CreateUserUsecase
@@ -22,13 +23,16 @@ export class CreateUserUsecase
 
   async execute(dto: CreateUserDto): Promise<Result<void>> {
     try {
-      const { email, password } = dto;
-
-      const invalidEmail = await this.userRepo.emailAlreadyExists(email);
+      const invalidEmail = await this.userRepo.emailAlreadyExists(dto.email);
       if (invalidEmail) return Result.fail(INVALID_USER_EMAIL);
-      const hashedPassword = await bcrypt.hash(password, 12);
+      const hashedPassword = await bcrypt.hash(dto.password, 12);
 
-      const createUser = User.create({ ...dto, password: hashedPassword });
+      const createUser = User.create({
+        email: dto.email,
+        id: uuidv4(),
+        name: dto.name,
+        password: hashedPassword,
+      });
       if (createUser.isFailure) return Result.fail(createUser.error);
 
       await this.userRepo.save(createUser.getResult);

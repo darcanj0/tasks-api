@@ -6,14 +6,18 @@ export interface IUserRepo {
   emailAlreadyExists(email: string): Promise<boolean>;
   save(user: User): Promise<void>;
   findUserByEmail(email: string): Promise<User>;
+  findUserById(id: string): Promise<User>;
 }
 
 @Schema()
 export class UserModel {
+  @Prop({ required: true, unique: true })
+  id!: string;
+
   @Prop({ required: true })
   name!: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   email!: string;
 
   @Prop({ required: true })

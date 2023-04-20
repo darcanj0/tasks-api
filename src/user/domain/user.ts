@@ -2,6 +2,7 @@ import { INVALID_USER_NAME } from 'src/utils/error-messages';
 import { Result } from 'src/utils/result';
 
 interface UserProps {
+  id: string;
   name: string;
   email: string;
   password: string;
@@ -9,6 +10,10 @@ interface UserProps {
 
 export class User {
   props: UserProps;
+
+  get id() {
+    return this.props.id;
+  }
 
   get name() {
     return this.props.name;
@@ -37,10 +42,7 @@ export class User {
   }
 
   private constructor(props: UserProps) {
-    const { email, name, password } = props;
-    this.props.email = email;
-    this.props.name = name;
-    this.props.password = password;
+    this.props = props;
   }
 
   public static isValidName(name: string): boolean {

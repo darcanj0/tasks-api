@@ -23,9 +23,9 @@ export class UpdateUserUsecase
 
   async execute(dto: UpdateUserDto): Promise<Result<void>> {
     try {
-      const { email, password, name } = dto;
+      const { email, password, name, id } = dto;
 
-      const user = await this.userRepo.findUserByEmail(email);
+      const user = await this.userRepo.findUserById(id);
       if (!user) return Result.fail(INVALID_USER_NOT_FOUND);
 
       if (email) {

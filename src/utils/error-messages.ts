@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  InternalServerErrorException,
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
@@ -18,6 +19,8 @@ export const CheckResult = (result: Result<any>): void | never => {
         throw new UnprocessableEntityException(message);
       case 400:
         throw new BadRequestException(message);
+      case 500:
+        throw new InternalServerErrorException(message);
     }
   }
 };

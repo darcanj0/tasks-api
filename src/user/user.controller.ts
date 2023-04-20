@@ -1,4 +1,4 @@
-import { Body, Controller, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Inject, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateUserUsecase } from './usecases/create-user/create-user.usecase';
 import { CheckResult } from 'src/utils/error-messages';
@@ -26,12 +26,15 @@ export class UserController {
     return CheckResult(result);
   }
 
-  @Post()
+  @Post(':id')
   @ApiOperation({
     summary: 'Updates an existing user',
   })
-  async updateUser(@Body() dto: UpdateUserDto): Promise<void> {
-    const result = await this.updateUserUsecase.execute(dto);
+  async updateUser(
+    @Body() dto: UpdateUserDto,
+    @Param('id') id: string,
+  ): Promise<void> {
+    const result = await this.updateUserUsecase.execute({ ...dto, id });
     return CheckResult(result);
   }
 }

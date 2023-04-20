@@ -9,6 +9,18 @@ export class UserRepository implements IUserRepo {
   constructor(
     @InjectModel(UserModel.name) private userModel: Model<UserModel>,
   ) {}
+  async findUserById(id: string): Promise<User> {
+    const query = await this.userModel.findOne({
+      id,
+    });
+    if (!query) return null;
+    return User.create({
+      email: query.email,
+      name: query.name,
+      password: query.password,
+      id: query.id,
+    }).getResult;
+  }
 
   async findUserByEmail(email: string): Promise<User> {
     const query = await this.userModel.findOne({
@@ -19,16 +31,17 @@ export class UserRepository implements IUserRepo {
       email: query.email,
       name: query.name,
       password: query.password,
+      id: query.id,
     }).getResult;
   }
 
-  async emailAlreadyExists(email: string): Promise<any> {
+  async emailAlreadyExists(email: string): Promise<boolean> {
     const query = await this.userModel
       .findOne({
         email,
       })
       .exec();
-    return query;
+    return !!query;
   }
 
   async save(user: User): Promise<void> {
@@ -40,6 +53,7 @@ export class UserRepository implements IUserRepo {
       email: user.email,
       name: user.name,
       password: user.password,
+      id: user.id,
     };
 
     if (!query) {
@@ -48,7 +62,7 @@ export class UserRepository implements IUserRepo {
     }
 
     await this.userModel.updateOne(
-      { id: user.email },
+      { id: user.id },
       {
         $set: obj,
       },
