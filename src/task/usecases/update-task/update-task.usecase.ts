@@ -10,6 +10,7 @@ import { IUseCase } from 'src/utils/usecase.interface';
 import { UpdateTaskDto } from './update-task.dto';
 import { TagRepository } from 'src/tag/infra/tag-repository';
 import { ITagRepo } from 'src/tag/infra/tag-repository.interface';
+import { TaskRepository } from 'src/task/infra/task-repository';
 
 @Injectable()
 export class UpdateTaskUsecase

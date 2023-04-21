@@ -8,13 +8,14 @@ import { v4 as uuidv4 } from 'uuid';
 import { INTERNAL_SERVER_ERROR } from 'src/utils/error-messages';
 import { TagRepository } from 'src/tag/infra/tag-repository';
 import { ITagRepo } from 'src/tag/infra/tag-repository.interface';
+import { TaskRepository } from 'src/task/infra/task-repository';
 
 @Injectable()
 export class CreateTaskUsecase
   implements IUseCase<CreateTaskDto, Result<void>>
 {
   constructor(
-    @Inject()
+    @Inject(TaskRepository)
     private readonly taskRepo: ITaskRepo,
 
     @Inject(TagRepository)

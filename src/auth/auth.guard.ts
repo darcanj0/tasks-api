@@ -20,6 +20,7 @@ import {
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
+    @Inject(JwtService)
     private readonly jwtService: JwtService,
     @Inject(UserRepository) private readonly userRepo: IUserRepo,
   ) {}
