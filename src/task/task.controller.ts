@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Inject,
   Param,
@@ -18,6 +19,8 @@ import { UpdateTaskDto } from './usecases/update-task/update-task.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { TaskRepository } from './infra/task-repository';
 import { TaskModel } from './infra/task-repository.interface';
+import { DeleteTasksDto } from './usecases/delete-tasks/delete-task.dto';
+import { DeleteTasksUsecase } from './usecases/delete-tasks/delete-tasks.usecase';
 
 @Controller('task')
 @ApiTags('task')
@@ -28,6 +31,9 @@ export class TaskController {
 
     @Inject(UpdateTaskUsecase)
     private readonly updateTaskUsecase: UpdateTaskUsecase,
+
+    @Inject(DeleteTasksUsecase)
+    private readonly deleteTasksUsecase: DeleteTasksUsecase,
 
     @Inject(TaskRepository)
     private readonly taskRepo: TaskRepository,
@@ -78,5 +84,22 @@ export class TaskController {
   async getUserTasks(@CurrentUser() user: User): Promise<TaskModel[]> {
     const tasks = await this.taskRepo.findTasksByCreator(user.id);
     return tasks.map((task) => this.taskRepo.toModel(task));
+  }
+
+  @Delete()
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Delete tasks',
+  })
+  async DeleteTasksDto(
+    @Body() dto: DeleteTasksDto,
+    @CurrentUser() user: User,
+  ): Promise<void> {
+    const result = await this.deleteTasksUsecase.execute({
+      ...dto,
+      user,
+    });
+    return CheckResult(result);
   }
 }

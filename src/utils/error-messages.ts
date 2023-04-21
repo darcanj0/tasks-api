@@ -92,3 +92,8 @@ export const INVALID_TASK_TITLE: IErrorMessage = {
   error: 'Task title needs to be between 5 and 50 characs',
   statusCode: 422,
 };
+
+export const INVALID_TASK_DELETION: IErrorMessage = {
+  error: 'Task does not belong to user or does not exist',
+  statusCode: 400,
+};

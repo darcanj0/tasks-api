@@ -37,6 +37,10 @@ export class Task {
     return this.props.creatorId;
   }
 
+  isCreator(creatorId: string) {
+    return creatorId === this.props.creatorId;
+  }
+
   get dueDate() {
     return this.props.dueDate;
   }

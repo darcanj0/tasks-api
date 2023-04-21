@@ -6,6 +6,8 @@ export interface ITaskRepo {
   save(task: Task): Promise<void>;
   findTaskById(id: string): Promise<Task>;
   findTasksByCreator(creatorId: string): Promise<Task[]>;
+  findTasksByIds(ids: string[]): Promise<Task[]>;
+  deleteMany(tasks: Task[]): Promise<void>;
 }
 
 @Schema()

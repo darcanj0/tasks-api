@@ -9,6 +9,29 @@ export class TaskRepository implements ITaskRepo {
   constructor(
     @InjectModel(TaskModel.name) private taskModel: Model<TaskModel>,
   ) {}
+
+  async findTasksByIds(ids: string[]): Promise<Task[]> {
+    const query = await this.taskModel
+      .find({
+        id: { $in: ids },
+      })
+      .exec();
+
+    if (!query || query.length === 0) return [];
+
+    return query.map((task) => this.toDomain(task));
+  }
+
+  async deleteMany(tasks: Task[]): Promise<void> {
+    const ids = tasks.map((task) => task.id);
+
+    await this.taskModel
+      .deleteMany({
+        id: { $in: ids },
+      })
+      .exec();
+  }
+
   async findTasksByCreator(creatorId: string): Promise<Task[]> {
     const query = await this.taskModel
       .find({

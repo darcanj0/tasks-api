@@ -6,11 +6,17 @@ import { TaskRepository } from './infra/task-repository';
 import { MongoModule } from 'src/mongo/mongo.module';
 import { TagModule } from 'src/tag/tag.module';
 import { UserModule } from 'src/user/user.module';
+import { DeleteTasksUsecase } from './usecases/delete-tasks/delete-tasks.usecase';
 
 @Module({
   imports: [MongoModule, TagModule, UserModule],
   controllers: [TaskController],
-  providers: [CreateTaskUsecase, UpdateTaskUsecase, TaskRepository],
+  providers: [
+    CreateTaskUsecase,
+    UpdateTaskUsecase,
+    DeleteTasksUsecase,
+    TaskRepository,
+  ],
   exports: [TaskRepository],
 })
 export class TaskModule {}
