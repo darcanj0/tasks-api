@@ -6,6 +6,7 @@ export interface ITagRepo {
   findTagById(id: string): Promise<Tag>;
   findTagsByIds(ids: string[]): Promise<Tag[]>;
   save(tag: Tag): Promise<void>;
+  findTagsByCreator(creatorId: string): Promise<Tag[]>;
 }
 
 @Schema()

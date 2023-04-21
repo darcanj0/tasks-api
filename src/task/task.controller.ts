@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Inject,
   Param,
   Post,
@@ -15,6 +16,8 @@ import { User } from 'src/user/domain/user';
 import { CheckResult } from 'src/utils/error-messages';
 import { UpdateTaskDto } from './usecases/update-task/update-task.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { TaskRepository } from './infra/task-repository';
+import { TaskModel } from './infra/task-repository.interface';
 
 @Controller('task')
 @ApiTags('task')
@@ -25,6 +28,9 @@ export class TaskController {
 
     @Inject(UpdateTaskUsecase)
     private readonly updateTaskUsecase: UpdateTaskUsecase,
+
+    @Inject(TaskRepository)
+    private readonly taskRepo: TaskRepository,
   ) {}
 
   @Post()
@@ -61,5 +67,16 @@ export class TaskController {
       id,
     });
     return CheckResult(result);
+  }
+
+  @Get()
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Get my tasks',
+  })
+  async getUserTasks(@CurrentUser() user: User): Promise<TaskModel[]> {
+    const tasks = await this.taskRepo.findTasksByCreator(user.id);
+    return tasks.map((task) => this.taskRepo.toModel(task));
   }
 }

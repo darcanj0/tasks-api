@@ -5,6 +5,7 @@ import {
   UseGuards,
   Inject,
   Param,
+  Get,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateTagDto } from './usecases/create-tag/create-tag.dto';
@@ -15,6 +16,8 @@ import { UpdateTagUsecase } from './usecases/update-tag/update-tag.usecase';
 import { UpdateTagDto } from './usecases/update-tag/update-tag.dto';
 import { CurrentUser } from 'src/auth/current-user.decorator';
 import { User } from 'src/user/domain/user';
+import { TagRepository } from './infra/tag-repository';
+import { TagModel } from './infra/tag-repository.interface';
 
 @Controller('tag')
 @ApiTags('tag')
@@ -25,6 +28,9 @@ export class TagController {
 
     @Inject(UpdateTagUsecase)
     private readonly updateTagUsecase: UpdateTagUsecase,
+
+    @Inject(TagRepository)
+    private readonly tagRepo: TagRepository,
   ) {}
 
   @Post()
@@ -61,5 +67,16 @@ export class TagController {
       user,
     });
     return CheckResult(result);
+  }
+
+  @Get()
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Get my tags',
+  })
+  async getUserTags(@CurrentUser() user: User): Promise<TagModel[]> {
+    const tags = await this.tagRepo.findTagsByCreator(user.id);
+    return tags.map((tag) => this.tagRepo.toModel(tag));
   }
 }

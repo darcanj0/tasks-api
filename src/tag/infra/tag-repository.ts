@@ -8,7 +8,19 @@ import { Model } from 'mongoose';
 export class TagRepository implements ITagRepo {
   constructor(@InjectModel(TagModel.name) private tagModel: Model<TagModel>) {}
 
-  private toDomain(target: TagModel): Tag {
+  async findTagsByCreator(creatorId: string): Promise<Tag[]> {
+    const query = await this.tagModel
+      .find({
+        creatorId: creatorId,
+      })
+      .exec();
+
+    if (!query || query.length === 0) return [];
+
+    return query.map((tag) => this.toDomain(tag));
+  }
+
+  public toDomain(target: TagModel): Tag {
     return Tag.create({
       creatorId: target.creatorId,
       hex: target.hex,
@@ -17,7 +29,7 @@ export class TagRepository implements ITagRepo {
     }).getResult;
   }
 
-  private toModel(target: Tag): TagModel {
+  public toModel(target: Tag): TagModel {
     return {
       creatorId: target.creatorId,
       hex: target.hex,

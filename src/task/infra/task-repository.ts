@@ -9,8 +9,19 @@ export class TaskRepository implements ITaskRepo {
   constructor(
     @InjectModel(TaskModel.name) private taskModel: Model<TaskModel>,
   ) {}
+  async findTasksByCreator(creatorId: string): Promise<Task[]> {
+    const query = await this.taskModel
+      .find({
+        creatorId: creatorId,
+      })
+      .exec();
 
-  private toDomain(target: TaskModel): Task {
+    if (!query || query.length === 0) return [];
+
+    return query.map((task) => this.toDomain(task));
+  }
+
+  toDomain(target: TaskModel): Task {
     return Task.create({
       title: target.title,
       creatorId: target.creatorId,
@@ -20,7 +31,7 @@ export class TaskRepository implements ITaskRepo {
     }).getResult;
   }
 
-  private toModel(target: Task): TaskModel {
+  toModel(target: Task): TaskModel {
     return {
       creatorId: target.creator,
       dueDate: target.dueDate ?? undefined,

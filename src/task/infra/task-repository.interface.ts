@@ -5,6 +5,7 @@ import { HydratedDocument } from 'mongoose';
 export interface ITaskRepo {
   save(task: Task): Promise<void>;
   findTaskById(id: string): Promise<Task>;
+  findTasksByCreator(creatorId: string): Promise<Task[]>;
 }
 
 @Schema()
