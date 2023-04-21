@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { IUseCase } from 'src/utils/usecase.interface';
-import { CreateTaskDto } from './create-task.dto';
+import { CreateTaskDto, CreateTaskUsecaseDto } from './create-task.dto';
 import { Result } from 'src/utils/result';
 import { ITaskRepo } from 'src/task/infra/task-repository.interface';
 import { Task } from 'src/task/domain/task';
@@ -21,7 +21,7 @@ export class CreateTaskUsecase
     @Inject(TagRepository)
     private readonly tagRepo: ITagRepo,
   ) {}
-  async execute(dto: CreateTaskDto): Promise<Result<void>> {
+  async execute(dto: CreateTaskUsecaseDto): Promise<Result<void>> {
     try {
       const { title, user, dueDate, tags } = dto;
 
@@ -37,12 +37,15 @@ export class CreateTaskUsecase
 
       const task = createTask.getResult;
 
-      if (tags.length > 0) {
+      if (!!tags && tags.length > 0) {
         const findTags = await this.tagRepo.findTagsByIds(tags);
-        findTags.forEach((tag) => task.addTag(tag.id));
+        findTags
+          .filter((tag) => tag.isCreator(user.id))
+          .forEach((tag) => task.addTag(tag.id));
       }
 
       await this.taskRepo.save(task);
+      return Result.ok();
     } catch (error) {
       return Result.fail(INTERNAL_SERVER_ERROR);
     }

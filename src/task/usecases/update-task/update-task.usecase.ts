@@ -7,7 +7,7 @@ import {
 } from 'src/utils/error-messages';
 import { Result } from 'src/utils/result';
 import { IUseCase } from 'src/utils/usecase.interface';
-import { UpdateTaskDto } from './update-task.dto';
+import { UpdateTaskDto, UpdateTaskUsecaseDto } from './update-task.dto';
 import { TagRepository } from 'src/tag/infra/tag-repository';
 import { ITagRepo } from 'src/tag/infra/tag-repository.interface';
 import { TaskRepository } from 'src/task/infra/task-repository';
@@ -24,7 +24,7 @@ export class UpdateTaskUsecase
     private readonly tagRepo: ITagRepo,
   ) {}
 
-  async execute(dto: UpdateTaskDto): Promise<Result<void>> {
+  async execute(dto: UpdateTaskUsecaseDto): Promise<Result<void>> {
     try {
       const { user, dueDate, tags, title, id } = dto;
 
@@ -41,7 +41,9 @@ export class UpdateTaskUsecase
 
       if (tags.length > 0) {
         const findTags = await this.tagRepo.findTagsByIds(tags);
-        findTags.forEach((tag) => task.addTag(tag.id));
+        findTags
+          .filter((tag) => tag.isCreator(user.id))
+          .forEach((tag) => task.addTag(tag.id));
       }
 
       await this.taskRepo.save(task);

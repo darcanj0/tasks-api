@@ -50,7 +50,9 @@ export class Task {
   }
 
   addTag(tagId: string): Result<void> {
-    const cannotAdd = Task.tooManyTags([...this.tags, tagId]);
+    const cannotAdd =
+      Task.tooManyTags([...this.tags, tagId]) ||
+      this.props.tagsIds.some((tag) => tag === tagId);
     if (cannotAdd) return Result.fail(INVALID_AMMOUNT_TAGS);
     this.props.tagsIds.push(tagId);
     return Result.ok();

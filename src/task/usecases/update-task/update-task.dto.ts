@@ -45,3 +45,8 @@ export class UpdateTaskDto {
   })
   tags?: string[];
 }
+
+export class UpdateTaskUsecaseDto extends UpdateTaskDto {
+  user: User;
+  id: string;
+}

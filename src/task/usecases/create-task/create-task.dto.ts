@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsDate,
+  IsDateString,
   IsOptional,
   IsString,
   IsUUID,
@@ -21,15 +21,24 @@ export class CreateTaskDto {
   })
   title: string;
 
-  user: User;
-
   @IsOptional()
-  @IsDate()
+  @IsDateString()
+  @ApiProperty({
+    type: Date,
+    example: new Date(),
+  })
   dueDate?: Date;
 
   @IsOptional()
   @IsUUID(4, {
     each: true,
   })
+  @ApiProperty({
+    type: Array<string>,
+  })
   tags?: string[];
+}
+
+export class CreateTaskUsecaseDto extends CreateTaskDto {
+  user: User;
 }

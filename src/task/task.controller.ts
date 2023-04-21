@@ -40,7 +40,7 @@ export class TaskController {
     summary: 'Create a task',
   })
   async createTask(
-    @Body() dto: Omit<CreateTaskDto, 'user'>,
+    @Body() dto: CreateTaskDto,
     @CurrentUser() user: User,
   ): Promise<void> {
     const result = await this.createTaskUsecase.execute({
@@ -57,7 +57,7 @@ export class TaskController {
   })
   @UseGuards(AuthGuard)
   async update(
-    @Body() dto: Omit<UpdateTaskDto, 'user' | 'id'>,
+    @Body() dto: UpdateTaskDto,
     @CurrentUser() user: User,
     @Param('id') id: string,
   ): Promise<void> {

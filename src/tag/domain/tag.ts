@@ -22,6 +22,10 @@ export class Tag {
     return this.props.creatorId;
   }
 
+  isCreator(creatorId: string) {
+    return creatorId === this.props.creatorId;
+  }
+
   get hex() {
     return this.props.hex;
   }
