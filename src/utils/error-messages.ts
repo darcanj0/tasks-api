@@ -78,6 +78,11 @@ export const INVALID_TAG_CREATOR: IErrorMessage = {
   statusCode: 403,
 };
 
+export const INVALID_TAG_DELETION: IErrorMessage = {
+  error: 'Tag does not belong to user or does not exist',
+  statusCode: 400,
+};
+
 export const INVALID_TASK_NOT_FOUND: IErrorMessage = {
   error: 'Task not found',
   statusCode: 404,
