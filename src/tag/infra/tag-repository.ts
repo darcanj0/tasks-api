@@ -7,29 +7,51 @@ import { Model } from 'mongoose';
 @Injectable()
 export class TagRepository implements ITagRepo {
   constructor(@InjectModel(TagModel.name) private tagModel: Model<TagModel>) {}
+
+  private toDomain(target: TagModel): Tag {
+    return Tag.create({
+      creatorId: target.creatorId,
+      hex: target.hex,
+      id: target.id,
+      title: target.title,
+    }).getResult;
+  }
+
+  private toModel(target: Tag): TagModel {
+    return {
+      creatorId: target.creatorId,
+      hex: target.hex,
+      id: target.id,
+      title: target.title,
+    };
+  }
+
+  async findTagsByIds(ids: string[]): Promise<Tag[]> {
+    const query = await this.tagModel
+      .find({
+        id: { $in: ids },
+      })
+      .exec();
+
+    if (!query || query.length === 0) return [];
+
+    return query.map((tag) => this.toDomain(tag));
+  }
+
   async findTagById(id: string): Promise<Tag> {
     const query = await this.tagModel.findOne({
       id,
     });
     if (!query) return null;
-    return Tag.create({
-      creatorId: query.creatorId,
-      hex: query.hex,
-      title: query.title,
-      id: query.id,
-    }).getResult;
+    return this.toDomain(query);
   }
+
   async save(tag: Tag): Promise<void> {
     const query = await this.tagModel.findOne({
       id: tag.id,
     });
 
-    const obj = {
-      creatorId: tag.creatorId,
-      hex: tag.hex,
-      id: tag.id,
-      title: tag.title,
-    };
+    const obj = this.toModel(tag);
 
     if (!query) {
       await this.tagModel.insertMany([obj]);

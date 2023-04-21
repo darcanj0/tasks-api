@@ -77,3 +77,18 @@ export const INVALID_TAG_CREATOR: IErrorMessage = {
   error: 'Tag does not belong to user',
   statusCode: 403,
 };
+
+export const INVALID_TASK_NOT_FOUND: IErrorMessage = {
+  error: 'Task not found',
+  statusCode: 404,
+};
+
+export const INVALID_TASK_CREATOR: IErrorMessage = {
+  error: 'Task does not belong to user',
+  statusCode: 403,
+};
+
+export const INVALID_TASK_TITLE: IErrorMessage = {
+  error: 'Task title needs to be between 5 and 50 characs',
+  statusCode: 422,
+};

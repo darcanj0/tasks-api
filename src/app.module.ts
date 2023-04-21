@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { variables } from './config/variables';
 import { TagModule } from './tag/tag.module';
+import { TaskModule } from './task/task.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { TagModule } from './tag/tag.module';
     UserModule,
     AuthModule,
     TagModule,
+    TaskModule,
     ConfigModule.forRoot({ isGlobal: true, load: [variables] }),
   ],
   controllers: [AppController],
