@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsHexadecimal,
+  IsHexColor,
   IsOptional,
   IsString,
   MaxLength,
@@ -22,13 +22,15 @@ export class UpdateTagDto {
   title?: string;
 
   @IsOptional()
-  @IsHexadecimal()
+  @IsHexColor()
   @ApiProperty({
     example: '#1c38e3',
     type: String,
   })
   hex?: string;
+}
 
+export class UpdateTagUsecaseDto extends UpdateTagDto {
   id: string;
 
   user: User;

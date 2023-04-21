@@ -39,7 +39,7 @@ export class AuthGuard implements CanActivate {
       const user = await this.userRepo.findUserById(payload.id);
       if (!user) throw new UnauthorizedException(INVALID_AUTH);
 
-      request['user'] = payload;
+      request['user'] = user;
     } catch (error) {
       throw new InternalServerErrorException(INTERNAL_SERVER_ERROR);
     }

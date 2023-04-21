@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Result } from 'src/utils/result';
 import { IUseCase } from 'src/utils/usecase.interface';
-import { UpdateTagDto } from './update-tag.dto';
+import { UpdateTagDto, UpdateTagUsecaseDto } from './update-tag.dto';
 import { ITagRepo } from 'src/tag/infra/tag-repository.interface';
 import { TagRepository } from 'src/tag/infra/tag-repository';
 import {
@@ -16,7 +16,7 @@ export class UpdateTagUsecase implements IUseCase<UpdateTagDto, Result<void>> {
     @Inject(TagRepository)
     private readonly tagRepo: ITagRepo,
   ) {}
-  async execute(dto: UpdateTagDto): Promise<Result<void>> {
+  async execute(dto: UpdateTagUsecaseDto): Promise<Result<void>> {
     try {
       const { hex, id, title, user } = dto;
 

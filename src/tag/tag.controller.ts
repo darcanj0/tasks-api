@@ -40,7 +40,7 @@ export class TagController {
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   async createTag(
-    @Body() dto: Omit<CreateTagDto, 'user'>,
+    @Body() dto: CreateTagDto,
     @CurrentUser() user: User,
   ): Promise<void> {
     const result = await this.createTagUsecase.execute({
@@ -58,7 +58,7 @@ export class TagController {
   @ApiBearerAuth()
   async updateTag(
     @Param('id') id: string,
-    @Body() dto: Omit<UpdateTagDto, 'user' | 'id'>,
+    @Body() dto: UpdateTagDto,
     @CurrentUser() user: User,
   ): Promise<void> {
     const result = await this.updateTagUsecase.execute({
