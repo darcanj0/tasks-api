@@ -1,9 +1,6 @@
 
 # Tasks App Api
 
-Final test i've taken in the Blue EdTech course. This is the api part of the project.
-
-
 ## Environment Variables
 
 To run this project, you will need to add the following environment variables to your .env file.
@@ -34,7 +31,7 @@ $ npm install
 $ npm run start
 
 # watch mode
-$ npm run start:dev
+$ npm run dev
 
 # production mode
 $ npm run start:prod
