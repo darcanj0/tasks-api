@@ -9,17 +9,30 @@ export class UserRepository implements IUserRepo {
   constructor(
     @InjectModel(UserModel.name) private userModel: Model<UserModel>,
   ) {}
+  toModel(user: User): UserModel {
+    return {
+      email: user.email,
+      id: user.id,
+      name: user.name,
+      password: user.password,
+    };
+  }
+
+  toDomain(model: UserModel): User {
+    return User.create({
+      email: model.email,
+      id: model.id,
+      name: model.name,
+      password: model.password,
+    }).getResult;
+  }
+
   async findUserById(id: string): Promise<User> {
     const query = await this.userModel.findOne({
       id,
     });
     if (!query) return null;
-    return User.create({
-      email: query.email,
-      name: query.name,
-      password: query.password,
-      id: query.id,
-    }).getResult;
+    return this.toDomain(query);
   }
 
   async findUserByEmail(email: string): Promise<User> {
@@ -27,12 +40,7 @@ export class UserRepository implements IUserRepo {
       email,
     });
     if (!query) return null;
-    return User.create({
-      email: query.email,
-      name: query.name,
-      password: query.password,
-      id: query.id,
-    }).getResult;
+    return this.toDomain(query);
   }
 
   async emailAlreadyExists(email: string): Promise<boolean> {
@@ -49,12 +57,7 @@ export class UserRepository implements IUserRepo {
       email: user.email,
     });
 
-    const obj = {
-      email: user.email,
-      name: user.name,
-      password: user.password,
-      id: user.id,
-    };
+    const obj = this.toModel(user);
 
     if (!query) {
       await this.userModel.insertMany([obj]);
